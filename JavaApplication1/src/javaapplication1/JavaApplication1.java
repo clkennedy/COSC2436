@@ -5,6 +5,7 @@
  */
 package javaapplication1;
 
+import java.util.Scanner;
 /**
  *
  * @author cameron.kennedy
@@ -18,7 +19,6 @@ public class JavaApplication1 {
         // TODO code application logic here
         System.out.println("Test Mama");
         //test Change
-        
     }
     
 }
