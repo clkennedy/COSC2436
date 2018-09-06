@@ -14,6 +14,8 @@ import Menu.MenuItem;
  */
 public class ListProjectMain {
     
+    private static ToDoList _toDoList = new ToDoList();
+    
     public static void main(String args[]){
         Menu menu = new Menu();
         setupMenu(menu);
@@ -22,14 +24,8 @@ public class ListProjectMain {
     
     public static void setupMenu(Menu menu){
         ListProjectMain m = new ListProjectMain();
-        menu.add(new MenuItem("New Item", m::newItem));
+        menu.add(new MenuItem("New Item", _toDoList::add));
+        menu.add(new MenuItem("Display ToDo List", _toDoList::Display));
         menu.add(new MenuItem("Quit", menu::Quit));
     }
-    
-    public boolean newItem(){
-        System.out.println("New Item");
-        return true;
-    }
-    
-    
 }

@@ -5,6 +5,8 @@
  */
 package ListProject;
 
+import java.lang.reflect.Field;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -16,15 +18,23 @@ public class ToDoItem {
     private String _name;
     private String _description;
     private Priority _priority;
-    private LocalDateTime _dueDate;
+    private LocalDate _dueDate;
     private boolean _completed;
     
     public ToDoItem(){
         this._name = "";
         this._description = "";
         this._priority = Priority.LOW;
-        this._dueDate = LocalDateTime.now();
+        this._dueDate = LocalDate.now();
         this._completed = false;
+    }
+    
+    public ToDoItem(String name, String desc, Priority pri, LocalDate date, boolean completed){
+        this._name = name;
+        this._description = desc;
+        this._priority = pri;
+        this._dueDate = date;
+        this._completed = completed;
     }
     
     @Override
@@ -34,7 +44,7 @@ public class ToDoItem {
     
     public String toStringAll(){
         return this._name + " | " + this._priority.toString() + " | " + 
-                this._dueDate.toString() + " | " + ((this._completed)? "Completed" : "Not Completed");
+                this._dueDate.format(ToDoList.DateFormatter)+ " | " + ((this._completed)? "Completed" : "Not Completed");
     }
     
     public void Name(String name){
@@ -49,7 +59,21 @@ public class ToDoItem {
     public void Priority(Priority pri){
         this._priority = pri;
     }
-    public void DueDate(LocalDateTime date){
+    public void DueDate(LocalDate date){
         this._dueDate = date;
+    }
+    
+    public void toCsv(){
+        String csvStr;
+               
+        csvStr = "";
+        
+        Field[] f = this.getClass().getDeclaredFields();
+        
+        for(Field field : f){
+            csvStr += field.getName() + ":";
+            
+        }
+        
     }
 }

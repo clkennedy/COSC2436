@@ -68,4 +68,8 @@ public class Menu {
         return true;
     }
     
+    public static void clearConsole(){
+        
+    }
+    
 }
