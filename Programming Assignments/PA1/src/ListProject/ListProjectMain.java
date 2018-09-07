@@ -26,6 +26,8 @@ public class ListProjectMain {
         ListProjectMain m = new ListProjectMain();
         menu.add(new MenuItem("New Item", _toDoList::add));
         menu.add(new MenuItem("Display ToDo List", _toDoList::Display));
+        menu.add(new MenuItem("Save", _toDoList::Save));
+        menu.add(new MenuItem("Load", _toDoList::Load));
         menu.add(new MenuItem("Quit", menu::Quit));
     }
 }

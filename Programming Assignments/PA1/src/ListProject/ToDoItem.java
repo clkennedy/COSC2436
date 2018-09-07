@@ -7,7 +7,8 @@ package ListProject;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 
 /**
  *
@@ -50,6 +51,9 @@ public class ToDoItem {
     public void Name(String name){
         this._name = name;
     }
+    public String Name(){
+        return this._name;
+    }
     public void Description(String desc){
         this._description = desc;
     }
@@ -63,7 +67,7 @@ public class ToDoItem {
         this._dueDate = date;
     }
     
-    public void toCsv(){
+    public String toCsv(){
         String csvStr;
                
         csvStr = "";
@@ -71,9 +75,43 @@ public class ToDoItem {
         Field[] f = this.getClass().getDeclaredFields();
         
         for(Field field : f){
-            csvStr += field.getName() + ":";
-            
+            try{
+                csvStr += field.getName() + ":" + field.get(this).toString();
+                csvStr += (field == f[f.length - 1]) ? ";" : ",";
+            }catch(Exception e){
+                System.out.println(e.getMessage()); 
+            }
         }
+        return csvStr;
+    }
+    
+    public void loadFromString(String loadStr){
+        String[] keyValuePairFields = loadStr.split(",");
         
+        for(String curStr : keyValuePairFields){
+            String[] pair = curStr.split(":");
+            Field[] f = this.getClass().getDeclaredFields();
+            for(Field field : f){
+                if(field.getName().equals(pair[0])){
+                    try {
+                        Object o = field.get(this);
+                        if(o instanceof String){
+                            this.getClass().getDeclaredField(field.getName()).set(this, pair[1]);
+                        }
+                        if(o instanceof Priority){
+                            this.getClass().getDeclaredField(field.getName()).set(this, Priority.valueOf(pair[1].toUpperCase()) );
+                        }
+                        if(o instanceof Boolean){
+                            this.getClass().getDeclaredField(field.getName()).set(this, Boolean.parseBoolean(pair[1]));
+                        }
+                        if(o instanceof LocalDate){
+                            this.getClass().getDeclaredField(field.getName()).set(this, LocalDate.parse(pair[1], DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                        }
+                    } catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException ex) {
+                        System.out.println(ex.getMessage());
+                    }
+                }
+            }
+        }
     }
 }
