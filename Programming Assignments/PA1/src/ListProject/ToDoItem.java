@@ -14,7 +14,10 @@ import java.time.format.DateTimeFormatterBuilder;
  *
  * @author cameron.kennedy
  */
-public class ToDoItem {
+public class ToDoItem implements Comparable{
+    
+    public static boolean SortOnPriority = true; 
+    public static boolean FilterCompleted = false; 
     
     private String _name;
     private String _description;
@@ -28,6 +31,14 @@ public class ToDoItem {
         this._priority = Priority.LOW;
         this._dueDate = LocalDate.now();
         this._completed = false;
+    }
+    
+    public static void SortOnPriority(){
+        ToDoItem.SortOnPriority = true;
+    }
+    
+    public static void SortOnDate(){
+        ToDoItem.SortOnPriority = false;
     }
     
     public ToDoItem(String name, String desc, Priority pri, LocalDate date, boolean completed){
@@ -45,7 +56,7 @@ public class ToDoItem {
     
     public String toStringAll(){
         return this._name + " | " + this._priority.toString() + " | " + 
-                this._dueDate.format(ToDoList.DateFormatter)+ " | " + ((this._completed)? "Completed" : "Not Completed");
+                this._dueDate.format(ToDoList.DATEFORMATTER)+ " | " + ((this._completed)? "Completed" : "Not Completed");
     }
     
     public void Name(String name){
@@ -60,11 +71,20 @@ public class ToDoItem {
     public void Completed(boolean completed){
         this._completed = completed;
     }
+    public boolean Completed(){
+        return this._completed;
+    }
     public void Priority(Priority pri){
         this._priority = pri;
     }
+    public Priority Priority(){
+        return this._priority;
+    }
     public void DueDate(LocalDate date){
         this._dueDate = date;
+    }
+    public LocalDate DueDate(){
+        return this._dueDate;
     }
     
     public String toCsv(){
@@ -86,6 +106,7 @@ public class ToDoItem {
     }
     
     public void loadFromString(String loadStr){
+        loadStr = loadStr.replace(";", "");
         String[] keyValuePairFields = loadStr.split(",");
         
         for(String curStr : keyValuePairFields){
@@ -112,6 +133,23 @@ public class ToDoItem {
                     }
                 }
             }
+        }
+    }
+
+    @Override
+    public int compareTo(Object t) {
+        ToDoItem compItem;
+        if(t instanceof ToDoItem){
+            compItem = (ToDoItem)t;
+        }
+        else{
+            return -99;
+        }
+        if(ToDoItem.SortOnPriority){
+            return this._priority.compareTo(compItem.Priority());
+        }
+        else{
+            return this._dueDate.compareTo(compItem.DueDate());
         }
     }
 }

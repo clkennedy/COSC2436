@@ -25,7 +25,11 @@ public class ListProjectMain {
     public static void setupMenu(Menu menu){
         ListProjectMain m = new ListProjectMain();
         menu.add(new MenuItem("New Item", _toDoList::add));
+        menu.add(new MenuItem("Remove Item", _toDoList::remove));
+        menu.add(new MenuItem("Modify Item", _toDoList::modify));
         menu.add(new MenuItem("Display ToDo List", _toDoList::Display));
+        menu.add(new MenuItem("Toggle Display (Priority/Due Date)", _toDoList::ToggleDisplayBy));
+        menu.add(new MenuItem("Filter/Unfilter Completed Items", _toDoList::ToggleFilterCompleted));
         menu.add(new MenuItem("Save", _toDoList::Save));
         menu.add(new MenuItem("Load", _toDoList::Load));
         menu.add(new MenuItem("Quit", menu::Quit));

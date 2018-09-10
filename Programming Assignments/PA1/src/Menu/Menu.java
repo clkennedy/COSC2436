@@ -5,7 +5,7 @@
  */
 package Menu;
 
-import com.sun.xml.internal.ws.util.StringUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -16,7 +16,7 @@ import java.util.Scanner;
  */
 public class Menu {
     
-    private List<MenuItem> _menuItems;
+    private final List<MenuItem> _menuItems;
     
     public Menu(){
         this._menuItems = new ArrayList<>();
