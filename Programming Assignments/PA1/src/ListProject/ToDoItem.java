@@ -5,6 +5,7 @@
  */
 package ListProject;
 
+import CustomEvent.CustomEventHandler;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -24,6 +25,8 @@ public class ToDoItem implements Comparable{
     private Priority _priority;
     private LocalDate _dueDate;
     private boolean _completed;
+    
+    public static final CustomEventHandler ItemModified = new CustomEventHandler();
     
     public ToDoItem(){
         this._name = "";
@@ -61,27 +64,35 @@ public class ToDoItem implements Comparable{
     
     public void Name(String name){
         this._name = name;
+        ToDoItem.ItemModified.Activate();
     }
     public String Name(){
         return this._name;
     }
     public void Description(String desc){
         this._description = desc;
+        ToDoItem.ItemModified.Activate();
+    }
+    public String Description(){
+        return this._description;
     }
     public void Completed(boolean completed){
         this._completed = completed;
+        ToDoItem.ItemModified.Activate();
     }
     public boolean Completed(){
         return this._completed;
     }
     public void Priority(Priority pri){
         this._priority = pri;
+        ToDoItem.ItemModified.Activate();
     }
     public Priority Priority(){
         return this._priority;
     }
     public void DueDate(LocalDate date){
         this._dueDate = date;
+        ToDoItem.ItemModified.Activate();
     }
     public LocalDate DueDate(){
         return this._dueDate;
@@ -96,8 +107,8 @@ public class ToDoItem implements Comparable{
         
         for(Field field : f){
             try{
-                csvStr += field.getName() + ":" + ((field.get(this).toString().equals(""))? " " : field.get(this).toString());
-                csvStr += (field == f[f.length - 1]) ? ";" : ",";
+                csvStr += field.getName() + "::" + ((field.get(this).toString().equals(""))? " " : field.get(this).toString());
+                csvStr += (field == f[f.length - 1]) ? ";" : ",,";
             }catch(Exception e){
                 System.out.println(e.getMessage()); 
             }
@@ -107,10 +118,10 @@ public class ToDoItem implements Comparable{
     
     public void loadFromString(String loadStr){
         loadStr = loadStr.replace(";", "");
-        String[] keyValuePairFields = loadStr.split(",");
+        String[] keyValuePairFields = loadStr.split(",,");
         
         for(String curStr : keyValuePairFields){
-            String[] pair = curStr.split(":");
+            String[] pair = curStr.split("::");
             Field[] f = this.getClass().getDeclaredFields();
             for(Field field : f){
                 if(field.getName().equals(pair[0])){
