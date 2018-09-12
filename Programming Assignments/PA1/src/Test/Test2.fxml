@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.181" xmlns:fx="http://javafx.com/fxml/1" fx:controller="test.FXMLDocumentController">
+  <children>
+    <MenuBar VBox.vgrow="NEVER">
+      <menus>
+        <Menu mnemonicParsing="false" text="File">
+          <items>
+            <MenuItem mnemonicParsing="false" onAction="#newList" text="New" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" onAction="#loadList" text="Open…" />
+            <MenuItem mnemonicParsing="false" onAction="#saveList" text="Save" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Quit" />
+          </items>
+        </Menu>
+      </menus>
+    </MenuBar>
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+      <children>
+        <Label alignment="CENTER" layoutX="155.0" layoutY="177.0" style="" text="Drag components from Library here…" textAlignment="CENTER" textFill="#9f9f9f" wrapText="false">
+          <font>
+            <Font size="18.0" />
+          </font>
+        </Label>
+            <SplitPane dividerPositions="0.2993730407523511, 0.6567398119122257" layoutX="-1.0" prefHeight="376.0" prefWidth="640.0">
+              <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                     <children>
+                        <TextField fx:id="nameField" layoutX="14.0" layoutY="14.0" onAction="#ValidateItem" onKeyTyped="#ValidateItemKeyBoard" promptText="name" />
+                        <RadioButton fx:id="low" layoutX="14.0" layoutY="185.0" mnemonicParsing="false" selected="true" text="Low">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="priority" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton fx:id="medium" layoutX="14.0" layoutY="209.0" mnemonicParsing="false" text="Medium" toggleGroup="$priority" />
+                        <RadioButton fx:id="urgent" layoutX="80.0" layoutY="208.0" mnemonicParsing="false" text="Urgent" toggleGroup="$priority" />
+                        <RadioButton fx:id="high" layoutX="80.0" layoutY="184.0" mnemonicParsing="false" text="High" toggleGroup="$priority" />
+                        <Label fx:id="label" layoutX="14.0" layoutY="163.0" text="Priority" />
+                        <DatePicker fx:id="dPicker" layoutX="7.0" layoutY="259.0" onAction="#ValidateItem" promptText="Due Date" />
+                        <Label layoutX="14.0" layoutY="236.0" text="Due Date" />
+                        <Button fx:id="addItemButton" disable="true" layoutX="13.0" layoutY="335.0" mnemonicParsing="false" onAction="#addItem" text="Add" />
+                        <Button fx:id="saveItemButton" disable="true" layoutX="112.0" layoutY="297.0" mnemonicParsing="false" onAction="#saveItem" text="Save" visible="false" />
+                        <Button fx:id="cancelItemButton" disable="true" layoutX="112.0" layoutY="329.0" mnemonicParsing="false" onAction="#cancelItem" text="Cancel" visible="false" />
+                        <TextArea fx:id="descField" layoutX="12.0" layoutY="52.0" prefHeight="105.0" prefWidth="161.0" promptText="description" wrapText="true" />
+                     </children>
+                  </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="374.0" prefWidth="165.0">
+                     <children>
+                        <ListView fx:id="lView" layoutX="1.0" layoutY="27.0" onMouseClicked="#SelectItemClick" prefHeight="348.0" prefWidth="222.0" />
+                        <CheckBox fx:id="filterCompleted" layoutX="1.0" layoutY="6.0" mnemonicParsing="false" onAction="#toggleFilter" text="Filter Completed" />
+                        <Button fx:id="toggleSortBy" layoutX="114.0" layoutY="2.0" mnemonicParsing="false" onAction="#toggleSortBy" prefHeight="23.0" prefWidth="101.0" text="Sort By: Priority">
+                           <font>
+                              <Font size="10.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane prefHeight="158.0" prefWidth="61.0">
+                     <children>
+                        <Label fx:id="nameLabel" layoutX="14.0" layoutY="10.0" text="Label" />
+                        <Label fx:id="descLabel" layoutX="14.0" layoutY="65.0" text="Label" />
+                        <Label fx:id="line1" layoutX="14.0" layoutY="40.0" text="---------------------------------------" />
+                        <Label fx:id="line2" layoutX="14.0" layoutY="207.0" text="---------------------------------------" />
+                        <Label fx:id="priLabel" layoutX="14.0" layoutY="224.0" text="Label" />
+                        <Label fx:id="dueDateLabel" layoutX="14.0" layoutY="252.0" text="Label" />
+                        <Button fx:id="modifyButton" layoutX="150.0" layoutY="335.0" mnemonicParsing="false" onAction="#modifyItem" text="Modify" />
+                        <Button fx:id="deleteButton" layoutX="14.0" layoutY="335.0" mnemonicParsing="false" onAction="#deleteItem" style="-fx-background-color: Red;" text="Delete" textFill="WHITE" />
+                        <Label fx:id="completedLabel" layoutX="14.0" layoutY="279.0" text="Label" />
+                        <Button fx:id="completeItemButton" layoutX="15.0" layoutY="303.0" mnemonicParsing="false" onAction="#modifyItem" style="-fx-background-color: blue;" text="Complete task" textFill="WHITE" />
+                     </children></AnchorPane>
+              </items>
+            </SplitPane>
+      </children>
+    </AnchorPane>
+  </children>
+</VBox>
