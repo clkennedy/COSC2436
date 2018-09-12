@@ -1,2 +1,4 @@
-SortOnPriority:true,FilterCompleted:false,_name:Yo Momma,_description:Desc 2,_priority:low,_dueDate:2017-07-15,_completed:true;
-SortOnPriority:true,FilterCompleted:false,_name:Name,_description:Desc,_priority:High,_dueDate:1999-12-15,_completed:false;
+SortOnPriority:false,FilterCompleted:false,_name:Name,_description:Desc,_priority:High,_dueDate:1999-12-15,_completed:false;
+SortOnPriority:false,FilterCompleted:false,_name:Yo Momma,_description:Desc 2,_priority:low,_dueDate:2017-07-15,_completed:true;
+SortOnPriority:false,FilterCompleted:false,_name:New Task,_description:This is a Description,_priority:Urgent,_dueDate:2018-10-04,_completed:false;
+SortOnPriority:false,FilterCompleted:false,_name:test Task,_description: ,_priority:Medium,_dueDate:2018-10-06,_completed:false;

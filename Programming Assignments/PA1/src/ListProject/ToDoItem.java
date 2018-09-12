@@ -96,7 +96,7 @@ public class ToDoItem implements Comparable{
         
         for(Field field : f){
             try{
-                csvStr += field.getName() + ":" + field.get(this).toString();
+                csvStr += field.getName() + ":" + ((field.get(this).toString().equals(""))? " " : field.get(this).toString());
                 csvStr += (field == f[f.length - 1]) ? ";" : ",";
             }catch(Exception e){
                 System.out.println(e.getMessage()); 

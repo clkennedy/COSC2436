@@ -32,6 +32,7 @@ public class ToDoList{
     private static final String DATEPATTERN = "dd-MM-yyyy";
     public final static DateTimeFormatter DATEFORMATTER = DateTimeFormatter.ofPattern(DATEPATTERN);
     
+    
     public final CustomEventHandler ListModified;
     
     private List<ToDoItem> _toDoItems;
@@ -161,6 +162,10 @@ public class ToDoList{
         return true;
     }
     
+    public List<ToDoItem> getItems(){
+        return this._toDoItems;
+    }
+    
     public String GetUserInputName(Scanner in){
         
         System.out.println();
@@ -235,11 +240,15 @@ public class ToDoList{
     
     public boolean Display(){
         //Menu.clearConsole();
-        Collections.sort(this._toDoItems);
+        this.Sort();
         System.out.println("");
         System.out.print(this);
         System.out.println("");
         return true;
+    }
+    
+    public void Sort(){
+        Collections.sort(this._toDoItems);
     }
     
     public boolean ToggleDisplayBy(){
@@ -258,6 +267,7 @@ public class ToDoList{
         
         return true;
     }
+    
     
     @Override
     public String toString(){
@@ -302,6 +312,27 @@ public class ToDoList{
         return true;
     }
     
+    public boolean Save(File file){
+       
+        PrintWriter pstream = null;
+        
+        try {
+            pstream = new PrintWriter( new FileWriter(file, false));
+        } catch (FileNotFoundException ex) {
+            System.out.println(ex.getMessage());
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        }
+        
+        if(pstream != null){
+            for(ToDoItem item : this._toDoItems){
+                pstream.println(item.toCsv());
+            }
+            pstream.close();
+        }
+        return true;
+    }
+    
     public boolean Load(){
         
         this._toDoItems = new ArrayList();
@@ -328,6 +359,32 @@ public class ToDoList{
                 item.loadFromString(filein.nextLine());
                 if(!item.Name().isEmpty()){
                     this._toDoItems.add(item);
+                }
+            }
+        }
+        
+        return true;
+    }
+    
+    public boolean Load(File file){
+        
+        this._toDoItems = new ArrayList();
+        
+        Scanner filein = null;
+        
+        try {
+            filein = new Scanner(new FileReader(file));
+        } catch (FileNotFoundException ex) {
+            System.out.println(ex.getMessage());
+        }
+        
+        if(filein != null){
+            while(filein.hasNext()){
+                ToDoItem item = new ToDoItem();
+                
+                item.loadFromString(filein.nextLine());
+                if(!item.Name().isEmpty()){
+                    this.add(item);
                 }
             }
         }
