@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.DatePicker?>
@@ -19,10 +15,11 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fillWidth="false" maxHeight="400.0" maxWidth="640.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ToDoListGuiContoller.FXMLDocumentController">
+<VBox fillWidth="false" maxHeight="400.0" maxWidth="640.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.181" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ToDoListGuiContoller.FXMLDocumentController">
   <children>
     <MenuBar maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" VBox.vgrow="NEVER">
       <menus>
@@ -49,7 +46,8 @@
               <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" SplitPane.resizableWithParent="false">
                      <children>
-                        <TextField fx:id="nameField" layoutX="14.0" layoutY="22.0" onAction="#ValidateItem" onKeyTyped="#ValidateItemKeyBoard" promptText="name" />
+                        <TextField fx:id="nameField" layoutX="14.0" layoutY="22.0" onAction="#ValidateItem" onKeyPressed="#ValidateOnEnter" onKeyTyped="#ValidateItemKeyBoard" promptText="name" />
+                        <TextArea fx:id="descField" layoutX="12.0" layoutY="52.0" prefHeight="105.0" prefWidth="161.0" promptText="description" wrapText="true" />
                         <RadioButton fx:id="low" layoutX="14.0" layoutY="185.0" mnemonicParsing="false" selected="true" text="Low">
                            <toggleGroup>
                               <ToggleGroup fx:id="priority" />
@@ -59,18 +57,17 @@
                         <RadioButton fx:id="urgent" layoutX="80.0" layoutY="208.0" mnemonicParsing="false" text="Urgent" toggleGroup="$priority" />
                         <RadioButton fx:id="high" layoutX="80.0" layoutY="184.0" mnemonicParsing="false" text="High" toggleGroup="$priority" />
                         <Label fx:id="label" layoutX="14.0" layoutY="163.0" text="Priority" />
-                        <DatePicker fx:id="dPicker" layoutX="7.0" layoutY="259.0" onAction="#ValidateItem" promptText="Due Date" />
+                        <DatePicker fx:id="dPicker" layoutX="7.0" layoutY="259.0" onAction="#ValidateItem" onKeyPressed="#ValidateOnEnter" onKeyTyped="#ValidateOnEnter" promptText="Due Date" />
                         <Label layoutX="14.0" layoutY="236.0" text="Due Date" />
                         <Button fx:id="addItemButton" disable="true" layoutX="13.0" layoutY="335.0" mnemonicParsing="false" onAction="#addItem" text="Add" />
                         <Button fx:id="saveItemButton" disable="true" layoutX="112.0" layoutY="297.0" mnemonicParsing="false" onAction="#saveItem" text="Save" visible="false" />
                         <Button fx:id="cancelItemButton" disable="true" layoutX="112.0" layoutY="329.0" mnemonicParsing="false" onAction="#cancelItem" text="Cancel" visible="false" />
-                        <TextArea fx:id="descField" layoutX="12.0" layoutY="52.0" prefHeight="105.0" prefWidth="161.0" promptText="description" wrapText="true" />
                         <CheckBox fx:id="autoSave" disable="true" layoutX="9.0" layoutY="2.0" mnemonicParsing="false" text="Auto Save to File" />
                      </children>
                   </AnchorPane>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="374.0" prefWidth="165.0" SplitPane.resizableWithParent="false">
                      <children>
-                        <ListView fx:id="lView" layoutY="27.0" onMouseClicked="#SelectItemClick" prefHeight="348.0" prefWidth="222.0" />
+                        <ListView fx:id="lView" layoutY="27.0" onKeyReleased="#SelectItemKey" onMouseClicked="#SelectItemClick" prefHeight="348.0" prefWidth="222.0" />
                         <CheckBox fx:id="filterCompleted" layoutX="1.0" layoutY="6.0" mnemonicParsing="false" onAction="#toggleFilter" text="Filter Completed" />
                         <Button fx:id="toggleSortBy" layoutX="114.0" layoutY="2.0" mnemonicParsing="false" onAction="#toggleSortBy" prefHeight="23.0" prefWidth="101.0" text="Sort By: Priority">
                            <font>

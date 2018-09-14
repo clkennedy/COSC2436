@@ -23,7 +23,7 @@ import javafx.stage.Stage;
  */
 public class ListProjectMain extends Application{
     
-    private static ToDoList _toDoList = new ToDoList();
+    private final static ToDoList _toDoList = new ToDoList();
     private static boolean launchGUI = true;
     
     public static void main(String args[]){
@@ -47,7 +47,7 @@ public class ListProjectMain extends Application{
     
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("Test.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("ToDoListGuiLayout.fxml"));
         
         Scene scene = new Scene(root);
         

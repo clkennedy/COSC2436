@@ -11,11 +11,10 @@ import ListProject.ToDoItem;
 import ListProject.ToDoList;
 import java.io.File;
 import java.net.URL;
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -28,19 +27,19 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
-import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
 /**
  *
  * @author ARustedKnight
  */
-public class FXMLDocumentController implements Initializable {
+public class FXMLDocumentController implements Initializable{
     
     private ToDoList _toDoList = new ToDoList();
     
@@ -112,7 +111,15 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML 
     public void SelectItemClick(MouseEvent arg0) {
-        
+        SelectItem();
+    }
+    
+    @FXML 
+    public void SelectItemKey(KeyEvent event) {
+        SelectItem();
+    }
+    
+    private void SelectItem(){
         if(lView.getSelectionModel().getSelectedItem() == null) return;
         
         currentSelectedItem = (ToDoItem)lView.getSelectionModel().getSelectedItem();
@@ -128,6 +135,13 @@ public class FXMLDocumentController implements Initializable {
         descLabel.setText(currentSelectedItem.Description());
         priLabel.setText("Priority: " + currentSelectedItem.Priority().toString());
         dueDateLabel.setText("Due Date: " + ToDoList.DATEFORMATTER.format(currentSelectedItem.DueDate()));
+        if(LocalDate.now().compareTo(currentSelectedItem.DueDate()) > 0 && !currentSelectedItem.Completed()){
+            dueDateLabel.setTextFill(Color.RED);
+        }
+        else{
+            dueDateLabel.setTextFill(Color.BLACK);
+        }
+        
         completeLabel.setText(((currentSelectedItem.Completed())?"Completed" : "Not Completed"));
     }
     
@@ -158,7 +172,12 @@ public class FXMLDocumentController implements Initializable {
         FileChooser fChooser = new FileChooser();
         fChooser.setTitle("Save ToDo List");
         File f = new File(System.getProperty("user.dir"));
-        fChooser.setInitialDirectory(f);
+        if(currentLoadedFile != null){
+            fChooser.setInitialDirectory(new File(currentLoadedFile.getParent()));
+            fChooser.setInitialFileName(currentLoadedFile.getName());
+        }else{
+            fChooser.setInitialDirectory(f);
+        }
         fChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("ToDo List (*.ToDo)", "*.ToDo"));
         
         f = fChooser.showSaveDialog(new Stage());
@@ -217,7 +236,10 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML 
     public void addItem(ActionEvent event) {
-        
+        addNewItemToList();
+    }
+    
+    private void addNewItemToList(){
         this._toDoList.add(new ToDoItem(nameField.getText(), descField.getText()
                 , Priority.valueOf(((RadioButton)priority.getSelectedToggle()).getId().toUpperCase()), dPicker.getValue(), false ));
         
@@ -307,6 +329,12 @@ public class FXMLDocumentController implements Initializable {
         Validate();
     }
     
+    @FXML 
+    public void ValidateOnEnter(KeyEvent event) {
+        if(event.getCode() == KeyCode.ENTER && !addItemButton.isDisable()){
+            addNewItemToList();
+        }
+    }
     
     public void Validate(){
         if(!"".equals(nameField.getText()) && !nameField.getText().isEmpty() && dPicker.getValue() != null){
@@ -373,5 +401,7 @@ public class FXMLDocumentController implements Initializable {
         lView.refresh();
         return true;
     }
+
+   
     
 }
