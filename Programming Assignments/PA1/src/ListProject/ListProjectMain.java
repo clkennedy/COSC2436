@@ -51,6 +51,11 @@ public class ListProjectMain extends Application{
         
         Scene scene = new Scene(root);
         
+        stage.setResizable(false);
+        
+        stage.setHeight(425);
+        stage.setWidth(root.prefWidth(425));
+        stage.setTitle("ToDo List");
         stage.setScene(scene);
         stage.show();
     }

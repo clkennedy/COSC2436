@@ -20,8 +20,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Control;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
@@ -34,6 +36,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 /**
  *
@@ -70,7 +73,7 @@ public class FXMLDocumentController implements Initializable{
     @FXML
     private DatePicker dPicker;
     @FXML
-    private ListView lView;
+    private ListView<ToDoItem> lView;
     @FXML
     private Button addItemButton;
     @FXML
@@ -143,6 +146,7 @@ public class FXMLDocumentController implements Initializable{
         }
         
         completeLabel.setText(((currentSelectedItem.Completed())?"Completed" : "Not Completed"));
+        
     }
     
     @FXML 
@@ -164,6 +168,13 @@ public class FXMLDocumentController implements Initializable{
         autoSave.setSelected(true);
         
         this._toDoList.Load(f);
+        
+        filterCompleted.setSelected(ToDoItem.FilterCompleted);
+        if(ToDoItem.SortOnPriority){
+            toggleSortBy.setText("Sort By: Priority");
+        }else{
+            toggleSortBy.setText("Sort By: Due Date");
+        }
         
     }
     @FXML 
@@ -318,6 +329,7 @@ public class FXMLDocumentController implements Initializable{
     public void completeItem(ActionEvent event) {
         currentSelectedItem.Completed(true);
         setItemDisplayFields();
+        Display();
     }
     
     @FXML 
@@ -349,10 +361,16 @@ public class FXMLDocumentController implements Initializable{
     public void initialize(URL url, ResourceBundle rb) {
         _toDoList.ListModified.Subscribe(this::Display);
         _toDoList.ListModified.Subscribe(this::AutoSave);
-        //ToDoItem.ItemModified.Subscribe(this::AutoSave);
         
         descLabel.setWrapText(true);
         descLabel.setPrefWidth(180);
+        
+        lView.setCellFactory(new Callback<ListView<ToDoItem>, ListCell<ToDoItem>>() {
+            @Override
+            public ListCell<ToDoItem> call(ListView<ToDoItem> param) {
+                return new ListCellFormatter();
+            }
+        });
         
         nameField.lengthProperty().addListener(new ChangeListener<Number>(){
             @Override
@@ -391,7 +409,6 @@ public class FXMLDocumentController implements Initializable{
         lView.getItems().clear();
         
         this._toDoList.Sort();
-        
         for(ToDoItem item : this._toDoList.getItems()){
             if(!ToDoItem.FilterCompleted || !item.Completed()){
                 lView.getItems().add(item);
@@ -399,6 +416,7 @@ public class FXMLDocumentController implements Initializable{
         }
         
         lView.refresh();
+        AutoSave();
         return true;
     }
 

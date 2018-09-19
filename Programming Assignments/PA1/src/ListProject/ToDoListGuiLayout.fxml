@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fillWidth="false" maxHeight="400.0" maxWidth="640.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.181" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ToDoListGuiContoller.FXMLDocumentController">
+<VBox fillWidth="false" maxHeight="400.0" maxWidth="832.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="832.0" xmlns="http://javafx.com/javafx/8.0.181" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ToDoListGuiContoller.FXMLDocumentController">
   <children>
     <MenuBar maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" VBox.vgrow="NEVER">
       <menus>
@@ -37,12 +37,7 @@
     </MenuBar>
     <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
       <children>
-        <Label alignment="CENTER" layoutX="155.0" layoutY="177.0" style="" text="Drag components from Library here…" textAlignment="CENTER" textFill="#9f9f9f" wrapText="false">
-          <font>
-            <Font size="18.0" />
-          </font>
-        </Label>
-            <SplitPane dividerPositions="0.2993730407523511, 0.6567398119122257" layoutX="-1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="376.0" prefWidth="640.0">
+            <SplitPane dividerPositions="0.4614457831325301, 0.736144578313253" layoutX="-1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="376.0" prefWidth="832.0">
               <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" SplitPane.resizableWithParent="false">
                      <children>
@@ -65,18 +60,18 @@
                         <CheckBox fx:id="autoSave" disable="true" layoutX="9.0" layoutY="2.0" mnemonicParsing="false" text="Auto Save to File" />
                      </children>
                   </AnchorPane>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="374.0" prefWidth="165.0" SplitPane.resizableWithParent="false">
+                <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="374.0" prefWidth="409.0" SplitPane.resizableWithParent="false">
                      <children>
-                        <ListView fx:id="lView" layoutY="27.0" onKeyReleased="#SelectItemKey" onMouseClicked="#SelectItemClick" prefHeight="348.0" prefWidth="222.0" />
-                        <CheckBox fx:id="filterCompleted" layoutX="1.0" layoutY="6.0" mnemonicParsing="false" onAction="#toggleFilter" text="Filter Completed" />
-                        <Button fx:id="toggleSortBy" layoutX="114.0" layoutY="2.0" mnemonicParsing="false" onAction="#toggleSortBy" prefHeight="23.0" prefWidth="101.0" text="Sort By: Priority">
+                        <ListView fx:id="lView" layoutY="27.0" onKeyReleased="#SelectItemKey" onMouseClicked="#SelectItemClick" prefHeight="348.0" prefWidth="409.0" />
+                        <CheckBox fx:id="filterCompleted" layoutX="12.0" layoutY="6.0" mnemonicParsing="false" onAction="#toggleFilter" text="Filter Completed" />
+                        <Button fx:id="toggleSortBy" layoutX="299.0" layoutY="2.0" mnemonicParsing="false" onAction="#toggleSortBy" prefHeight="23.0" prefWidth="101.0" text="Sort By: Priority">
                            <font>
                               <Font size="10.0" />
                            </font>
                         </Button>
                      </children>
                   </AnchorPane>
-                  <AnchorPane prefHeight="374.0" prefWidth="216.0" SplitPane.resizableWithParent="false">
+                  <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="374.0" prefWidth="216.0" SplitPane.resizableWithParent="false">
                      <children>
                         <Label fx:id="nameLabel" layoutX="14.0" layoutY="10.0" text="Label" visible="false" />
                         <Pane layoutX="12.0" layoutY="56.0" prefHeight="144.0" prefWidth="188.0">

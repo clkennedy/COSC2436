@@ -29,7 +29,7 @@ import java.util.Collections;
  */
 public class ToDoList{
     
-    private static final String DATEPATTERN = "dd-MM-yyyy";
+    private static final String DATEPATTERN = "MM-dd-yyyy";
     public final static DateTimeFormatter DATEFORMATTER = DateTimeFormatter.ofPattern(DATEPATTERN);
     
     
