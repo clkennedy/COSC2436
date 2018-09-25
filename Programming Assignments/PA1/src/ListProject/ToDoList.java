@@ -51,8 +51,8 @@ public class ToDoList{
     public boolean add(){
         Scanner in = new Scanner(System.in);
         
-        boolean success = this._toDoItems.add(new ToDoItem(GetUserInputName(in), GetUserInputDesc(in), 
-                GetUserInputPriority(in), GetUserInputDate(in), GetUserInputCompleted(in)));
+        boolean success = this._toDoItems.add(new ToDoItem(GetUserInputName(in), GetUserInputDescription(in), 
+                GetUserInputPriority(in), GetUserInputDueDate(in), GetUserInputCompleted(in)));
         
         this.ListModified.Activate();
         return success;
@@ -173,7 +173,7 @@ public class ToDoList{
         return in.nextLine();
     }
     
-    public String GetUserInputDesc(Scanner in){
+    public String GetUserInputDescription(Scanner in){
         
         System.out.println();
         System.out.print("Task Description: ");
@@ -196,7 +196,7 @@ public class ToDoList{
         return Priority.values()[Integer.parseInt(input) - 1];
     }
     
-    public LocalDate GetUserInputDate(Scanner in){
+    public LocalDate GetUserInputDueDate(Scanner in){
         LocalDate date;
         String input;
         boolean valid = false;
