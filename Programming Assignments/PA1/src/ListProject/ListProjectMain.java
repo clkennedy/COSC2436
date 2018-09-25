@@ -7,9 +7,15 @@ package ListProject;
 
 import Menu.Menu;
 import Menu.MenuItem;
+import java.io.Console;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Scanner;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import static javafx.application.Application.launch;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -25,6 +31,7 @@ public class ListProjectMain extends Application{
     
     private final static ToDoList _toDoList = new ToDoList();
     private static boolean launchGUI = true;
+    public static PrintWriter printWriter;
     
     public static void main(String args[]){
         
