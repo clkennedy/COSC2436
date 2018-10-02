@@ -94,7 +94,7 @@ public class CustomConsole extends Application implements Runnable{
             editing = false;
             CustomConsole.Close();
             CustomConsole.consoleThread.stop();
-            
+            System.exit(0);
         });
         primaryStage.show();
         
@@ -113,7 +113,9 @@ public class CustomConsole extends Application implements Runnable{
         consoleThread.setName("Console");
         consoleThread.start();
         try {
-            Thread.sleep(1000);
+            do{
+                Thread.sleep(1000);
+            }while(console == null);
         } catch (InterruptedException ex) {
             Logger.getLogger(CustomConsole.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -194,10 +196,16 @@ public class CustomConsole extends Application implements Runnable{
     
     public static void Close(){
         try {
-            consoleThread.join();
-            console.priStage.close();
+            consoleThread.stop();
+            Platform.runLater( new Runnable() {
+            @Override
+            public void run() {
+                console.priStage.close();
+            }
+        });
+            Thread.sleep(1000);
         } catch (Exception ex) {
-            Logger.getLogger(CustomConsole.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.getMessage());
         }
         
     }
