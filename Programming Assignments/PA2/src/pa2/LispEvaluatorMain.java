@@ -6,6 +6,8 @@
 package pa2;
 
 import customconsole.CustomConsole;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -18,10 +20,24 @@ public class LispEvaluatorMain {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-           CustomConsole console = new CustomConsole();
-           console.Show();
-           console.writeLn("HelloWorld!");
            
+        try {
+            CustomConsole.Show();
+        } catch (Exception ex) {
+            Logger.getLogger(LispEvaluatorMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        String input="";
+        do{
+            CustomConsole.write("Type Something: ");
+            input = CustomConsole.ReadLine();
+            if(!input.equals("")){
+                CustomConsole.Clear();
+                CustomConsole.writeLine("You Typed: " + input);
+            }
+        }while(!input.equals(""));
+        CustomConsole.writeLine("Press Enter to Continue");
+        CustomConsole.ReadLine();
+        CustomConsole.Close();
     }
     
 }
