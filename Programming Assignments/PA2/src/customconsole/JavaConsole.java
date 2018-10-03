@@ -27,12 +27,12 @@ import sun.management.snmp.jvminstr.JvmThreadInstanceEntryImpl;
  *
  * @author cameron.kennedy
  */
-public class CustomConsole extends Application implements Runnable{
+public class JavaConsole extends Application implements Runnable{
     private volatile TextArea ta;
     private volatile Stage priStage;
     private static Thread consoleThread;
     private static Thread mainThread;
-    private static CustomConsole console;
+    private static JavaConsole console;
     private static volatile boolean editing = false;
     private static volatile String consoleText;
     private static volatile boolean readSingleKey = false;
@@ -41,7 +41,7 @@ public class CustomConsole extends Application implements Runnable{
     private static volatile int typeHistoryIndex = 0;
     //private CustomConsole thread;
     
-    public CustomConsole(){
+    public JavaConsole(){
         //this.thread = thread;
     }
     
@@ -119,8 +119,8 @@ public class CustomConsole extends Application implements Runnable{
         primaryStage.setMaxHeight(Screen.getPrimary().getVisualBounds().getHeight());
         primaryStage.setOnCloseRequest(event -> {
             editing = false;
-            CustomConsole.Close();
-            CustomConsole.consoleThread.stop();
+            JavaConsole.Close();
+            JavaConsole.consoleThread.stop();
             System.exit(0);
         });
         primaryStage.show();
@@ -135,7 +135,7 @@ public class CustomConsole extends Application implements Runnable{
         if(console != null || consoleThread != null){
             throw new Exception("Console Already Running");
         }
-        consoleThread = new Thread(new CustomConsole());
+        consoleThread = new Thread(new JavaConsole());
         mainThread = Thread.currentThread();
         
         MainTracker m = new MainTracker(mainThread);
@@ -150,7 +150,7 @@ public class CustomConsole extends Application implements Runnable{
                 Thread.sleep(1000);
             }while(console == null);
         } catch (InterruptedException ex) {
-            Logger.getLogger(CustomConsole.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(JavaConsole.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -169,7 +169,7 @@ public class CustomConsole extends Application implements Runnable{
         consoleText = console.ta.getText();
     }
     public static void writeLine(boolean bool){
-        CustomConsole.writeLine("" + bool);
+        JavaConsole.writeLine("" + bool);
     }
     
     public static void write(String str){
@@ -202,13 +202,13 @@ public class CustomConsole extends Application implements Runnable{
             try {
                 Thread.sleep(50);
             } catch (InterruptedException ex) {
-                Logger.getLogger(CustomConsole.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(JavaConsole.class.getName()).log(Level.SEVERE, null, ex);
             }
         }while(editing);
         console.ta.setEditable(false);
         String str = console.ta.getText().substring(consoleText.length());
         typeHistory.push(str);
-        CustomConsole.writeLine("");
+        JavaConsole.writeLine("");
         return str;
     }
     
@@ -228,7 +228,7 @@ public class CustomConsole extends Application implements Runnable{
             try {
                 Thread.sleep(50);
             } catch (InterruptedException ex) {
-                Logger.getLogger(CustomConsole.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(JavaConsole.class.getName()).log(Level.SEVERE, null, ex);
             }
         }while(editing);
         console.ta.setEditable(false);
@@ -285,7 +285,7 @@ class MainTracker implements Runnable{
                     System.out.println(ex.getMessage());
                 }
             }
-            CustomConsole.Close();
+            JavaConsole.Close();
         }
         
     }

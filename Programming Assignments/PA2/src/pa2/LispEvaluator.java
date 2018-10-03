@@ -28,6 +28,7 @@ public class LispEvaluator {
         
         boolean nextHasToBeOperand = false;
         boolean nextHasToBeDigitOrFParen = false;
+        boolean openExpression = false, closeExpression = false;
         
         for(int i = 0; i < lispExpression.length(); i++){
             if(!isValidateCharacter(""+lispExpression.charAt(i))){
@@ -37,6 +38,7 @@ public class LispEvaluator {
             
             if(lispExpression.charAt(i) == ')'){
                 bParen ++;
+                if(fParen == bParen && openExpression) closeExpression = true;
                 if(nextHasToBeOperand || nextHasToBeDigitOrFParen){
                     lEval.push("Invalid Character at index (" + i + "): " + lispExpression.charAt(i) + ", Has to be Operator or '('");
                     return false;
@@ -44,6 +46,11 @@ public class LispEvaluator {
             }
             if(lispExpression.charAt(i) == '('){
                 fParen ++;
+                if(closeExpression){
+                    lEval.push("Invalid Expression, only 1 Lisp Expression at a time");
+                    return false;
+                }
+                if(!openExpression && !closeExpression) openExpression = true;
                 if(nextHasToBeOperand){
                     lEval.push("Invalid Character at index (" + i + "): " + lispExpression.charAt(i) + ", Has to be Operator");
                     return false;

@@ -5,7 +5,7 @@
  */
 package pa2;
 
-import customconsole.CustomConsole;
+import customconsole.JavaConsole;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,24 +22,24 @@ public class LispEvaluatorMain {
     public static void main(String[] args) {
            
         try {
-            CustomConsole.Show();
+            JavaConsole.Show();
         } catch (Exception ex) {
             Logger.getLogger(LispEvaluatorMain.class.getName()).log(Level.SEVERE, null, ex);
         }
         String input="";
         do{
-            CustomConsole.write("Type Lisp Expression to Evaluate (leave blank to quit): ");
-            input = CustomConsole.ReadLine();
+            JavaConsole.write("Type Lisp Expression to Evaluate (leave blank to quit): ");
+            input = JavaConsole.ReadLine();
             if(!input.equals("")){
-                CustomConsole.Clear();
-                CustomConsole.writeLine("Lisp Expression: " + input);
+                JavaConsole.Clear();
+                JavaConsole.writeLine("Lisp Expression: " + input);
                 
-                CustomConsole.writeLine("Result: " + LispEvaluator.GetResult(input));
+                JavaConsole.writeLine("Result: " + LispEvaluator.GetResult(input));
                 
             }
         }while(!input.equals(""));
-        CustomConsole.writeLine("Press Any Key to Continue");
-        CustomConsole.ReadKey();
+        JavaConsole.writeLine("Press Any Key to Continue");
+        JavaConsole.ReadKey();
     }
     
 }
