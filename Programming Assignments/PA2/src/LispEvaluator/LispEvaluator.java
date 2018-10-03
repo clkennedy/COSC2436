@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pa2;
+package LispEvaluator;
 
 import java.util.Stack;
 import java.util.regex.Matcher;
