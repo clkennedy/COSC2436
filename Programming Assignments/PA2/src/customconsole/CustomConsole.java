@@ -55,11 +55,15 @@ public class CustomConsole extends Application implements Runnable{
             @Override
             public void handle(KeyEvent ke){
                 if(!console.ta.isEditable())return;
+                if(console.ta.getCaretPosition() < consoleText.length() + 1){
+                    ta.positionCaret(console.ta.getText().length());
+                }
                 if(readSingleKey){
                     editing = false;
                     readSingleKey = false;
                     return;
                 }
+                
                 if((ke.getCode() == KeyCode.LEFT)
                         && console.ta.getCaretPosition() < consoleText.length() + 1){
                     ke.consume();
@@ -151,7 +155,7 @@ public class CustomConsole extends Application implements Runnable{
     }
     
     public static void writeLine(String str){
-        consoleText = console.ta.getText();
+        
         if(console.ta.isEditable()){
             Platform.runLater( new Runnable() {
             @Override
@@ -161,6 +165,8 @@ public class CustomConsole extends Application implements Runnable{
         });
         }
         console.ta.setText(console.ta.getText() + str + "\r\n");
+        
+        consoleText = console.ta.getText();
     }
     public static void writeLine(boolean bool){
         CustomConsole.writeLine("" + bool);
@@ -202,6 +208,7 @@ public class CustomConsole extends Application implements Runnable{
         console.ta.setEditable(false);
         String str = console.ta.getText().substring(consoleText.length());
         typeHistory.push(str);
+        CustomConsole.writeLine("");
         return str;
     }
     
@@ -250,7 +257,7 @@ public class CustomConsole extends Application implements Runnable{
     
     public static void Clear(){
         consoleText = "";
-        console.ta.setText(consoleText);
+        console.ta.setText("");
     }
 
     @Override

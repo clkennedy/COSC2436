@@ -121,6 +121,9 @@ public class LispEvaluator {
                 if(op.equals("-")){
                     lEval.push(SubtractExpression(expression) + "");
                 }
+                if(op.equals("/")){
+                    lEval.push(DivideExpression(expression) + "");
+                }
             }
         }
         if(lEval.size() != 1)
@@ -129,39 +132,53 @@ public class LispEvaluator {
     }
     
     private static double AddExpression(String str){
-        String[] adds = str.split(",");
-        double sum = 0;
+        String[] nums = str.split(",");
+        double result = 0;
         if(!str.equals("")){
-            for(int i = 0; i < adds.length; i++){
-                sum += Double.parseDouble(adds[i]);
+            for(int i = 0; i < nums.length; i++){
+                result += Double.parseDouble(nums[i]);
             }
         }
-        return sum;
+        return result;
     }
     
     private static double MultiplyExpression(String str){
-        String[] adds = str.split(",");
-        double sum = 1;
+        String[] nums = str.split(",");
+        double result = 1;
         if(!str.equals("")){
-            for(int i = 0; i < adds.length; i++){
-                sum *= Double.parseDouble(adds[i]);
+            for(int i = 0; i < nums.length; i++){
+                result *= Double.parseDouble(nums[i]);
             }
         }
-        return sum;
+        return result;
     }
     
     private static double SubtractExpression(String str){
-        String[] adds = str.split(",");
-        double sum = Double.parseDouble(adds[adds.length - 1]);
-        if(!str.equals("") && adds.length > 1){
-            for(int i = adds.length - 2; i >= 0; i--){
-                sum -= Double.parseDouble(adds[i]);
+        String[] nums = str.split(",");
+        double result = Double.parseDouble(nums[nums.length - 1]);
+        if(!str.equals("") && nums.length > 1){
+            for(int i = nums.length - 2; i >= 0; i--){
+                result -= Double.parseDouble(nums[i]);
             }
         }
         else{
-            return Double.parseDouble("-" + sum);
+            return Double.parseDouble("-" + result);
         }
-        return sum;
+        return result;
+    }
+    
+    private static double DivideExpression(String str){
+        String[] nums = str.split(",");
+        double result = Double.parseDouble(nums[nums.length - 1]);
+        if(!str.equals("") && nums.length > 1){
+            for(int i = nums.length - 2; i >= 0; i--){
+                result /= Double.parseDouble(nums[i]);
+            }
+        }
+        else{
+            return 1/result;
+        }
+        return result;
     }
     
 }

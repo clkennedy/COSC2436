@@ -28,21 +28,22 @@ public class LispEvaluatorMain {
         }
         String input="";
         do{
-            CustomConsole.write("Type Something: ");
+            CustomConsole.write("Type Lisp Expression to Evaluate (leave blank to quit): ");
             input = CustomConsole.ReadLine();
             if(!input.equals("")){
                 CustomConsole.Clear();
-                
-                CustomConsole.writeLine("You Typed: " + input);
+                CustomConsole.writeLine("Lisp Expression: " + input);
                 
                 if(LispEvaluator.ValidateLispExpression(input)){
-                    CustomConsole.writeLine(LispEvaluator.GetResult());
+                    CustomConsole.writeLine("Result: " + LispEvaluator.GetResult());
+                }
+                else{
+                    CustomConsole.writeLine("Not a Valid Expression");
                 }
             }
         }while(!input.equals(""));
         CustomConsole.writeLine("Press Any Key to Continue");
         CustomConsole.ReadKey();
-        //CustomConsole.Close();
     }
     
 }
