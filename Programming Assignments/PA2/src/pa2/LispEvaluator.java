@@ -16,11 +16,11 @@ import java.util.regex.Pattern;
 public class LispEvaluator {
     private static Stack<String> lEval = new Stack<>();
     private static String lExpression;
+    private static String errorMessage;
     
     private LispEvaluator(){
         
     }
-    
     
     public static boolean ValidateLispExpression(String lispExpression){
         int fParen = 0;
@@ -30,24 +30,39 @@ public class LispEvaluator {
         boolean nextHasToBeDigitOrFParen = false;
         
         for(int i = 0; i < lispExpression.length(); i++){
-            if(!isValidateCharacter(""+lispExpression.charAt(i)))return false;
+            if(!isValidateCharacter(""+lispExpression.charAt(i))){
+                lEval.push("Invalid Character at index (" + i + "): " +lispExpression.charAt(i));
+                return false;
+            }
             
             if(lispExpression.charAt(i) == ')'){
                 bParen ++;
-                if(nextHasToBeOperand || nextHasToBeDigitOrFParen)return false;
+                if(nextHasToBeOperand || nextHasToBeDigitOrFParen){
+                    lEval.push("Invalid Character at index (" + i + "): " + lispExpression.charAt(i) + ", Has to be Operator or '('");
+                    return false;
+                }
             }
             if(lispExpression.charAt(i) == '('){
                 fParen ++;
-                if(nextHasToBeOperand) return false;
+                if(nextHasToBeOperand){
+                    lEval.push("Invalid Character at index (" + i + "): " + lispExpression.charAt(i) + ", Has to be Operator");
+                    return false;
+                }
                 nextHasToBeOperand = true;
                 nextHasToBeDigitOrFParen = false;
             }
             if(isDigit(lispExpression.charAt(i) + "")){
-                if(nextHasToBeOperand)return false;
+                if(nextHasToBeOperand){
+                    lEval.push("Invalid Character at index (" + i + "): " + lispExpression.charAt(i) + ", Has to be Operator");
+                    return false;
+                }
                  nextHasToBeDigitOrFParen = false;
             }
             if(isOperand(lispExpression.charAt(i) + "")){
-                if(!nextHasToBeOperand) return false;
+                if(!nextHasToBeOperand){
+                    lEval.push("Invalid Character at index (" + i + "): " + lispExpression.charAt(i) + ", Has to be Operator");
+                    return false;
+                }
                 nextHasToBeOperand = false;
                 if(lispExpression.charAt(i) == '-' || lispExpression.charAt(i) == '/'){
                     nextHasToBeDigitOrFParen = true;
@@ -55,6 +70,7 @@ public class LispEvaluator {
             }
         }
         lExpression = lispExpression;
+        if(fParen != bParen)lEval.push("Uneven number of Open and Close Parenthesis");
         return fParen == bParen;
     }
     
@@ -77,7 +93,14 @@ public class LispEvaluator {
         return str.equals(")") || str.equals("(") || str.equals(" ");
     }
     
+    public static String GetResult(String str){
+        lExpression = str;
+        return GetResult();
+    }
+    
     public static String GetResult(){
+        
+        if(!ValidateLispExpression(lExpression)) return lEval.pop();
         
         boolean digit = false;
         int dStart = 0;

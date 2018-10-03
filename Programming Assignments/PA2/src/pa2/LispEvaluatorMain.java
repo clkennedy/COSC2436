@@ -34,12 +34,8 @@ public class LispEvaluatorMain {
                 CustomConsole.Clear();
                 CustomConsole.writeLine("Lisp Expression: " + input);
                 
-                if(LispEvaluator.ValidateLispExpression(input)){
-                    CustomConsole.writeLine("Result: " + LispEvaluator.GetResult());
-                }
-                else{
-                    CustomConsole.writeLine("Not a Valid Expression");
-                }
+                CustomConsole.writeLine("Result: " + LispEvaluator.GetResult(input));
+                
             }
         }while(!input.equals(""));
         CustomConsole.writeLine("Press Any Key to Continue");
