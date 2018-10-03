@@ -32,12 +32,17 @@ public class LispEvaluatorMain {
             input = CustomConsole.ReadLine();
             if(!input.equals("")){
                 CustomConsole.Clear();
+                
                 CustomConsole.writeLine("You Typed: " + input);
+                
+                if(LispEvaluator.ValidateLispExpression(input)){
+                    CustomConsole.writeLine(LispEvaluator.GetResult());
+                }
             }
         }while(!input.equals(""));
-        CustomConsole.writeLine("Press Enter to Continue");
-        CustomConsole.ReadLine();
-        CustomConsole.Close();
+        CustomConsole.writeLine("Press Any Key to Continue");
+        CustomConsole.ReadKey();
+        //CustomConsole.Close();
     }
     
 }

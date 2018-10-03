@@ -6,6 +6,7 @@
 package customconsole;
 
 
+import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
@@ -20,6 +21,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import sun.management.snmp.jvminstr.JvmThreadInstanceEntryImpl;
 
 /**
  *
@@ -35,6 +37,8 @@ public class CustomConsole extends Application implements Runnable{
     private static volatile String consoleText;
     private static volatile boolean readSingleKey = false;
     
+    private static volatile Stack<String> typeHistory = new Stack<>();
+    private static volatile int typeHistoryIndex = 0;
     //private CustomConsole thread;
     
     public CustomConsole(){
@@ -67,8 +71,27 @@ public class CustomConsole extends Application implements Runnable{
                     ta.positionCaret(console.ta.getText().length());
                 }
                 if(ke.getCode() == KeyCode.UP){
-                    //CustomConsole.writeLn("Up");
                     ke.consume();
+                    
+                    if(typeHistory.size() > 0){
+                        if(typeHistoryIndex > 0)
+                            typeHistoryIndex--;
+                        console.ta.setText(consoleText + typeHistory.get(typeHistoryIndex));
+                    }
+                    console.ta.positionCaret( console.ta.getText().length() );
+                }
+                if(ke.getCode() == KeyCode.DOWN){
+                    ke.consume();
+                    if(typeHistory.size() > 0){
+                        if(typeHistoryIndex < typeHistory.size())
+                            typeHistoryIndex++;
+                        if(typeHistoryIndex == typeHistory.size()){
+                            console.ta.setText(consoleText);
+                        }else{
+                            console.ta.setText(consoleText + typeHistory.get(typeHistoryIndex));
+                        }
+                        
+                    }
                     console.ta.positionCaret( console.ta.getText().length() );
                 }
                 if(ke.getCode() == KeyCode.ENTER){
@@ -110,6 +133,12 @@ public class CustomConsole extends Application implements Runnable{
         }
         consoleThread = new Thread(new CustomConsole());
         mainThread = Thread.currentThread();
+        
+        MainTracker m = new MainTracker(mainThread);
+        Thread mT = new Thread(m);
+        mT.setName("MainTracker");
+        mT.start();
+        
         consoleThread.setName("Console");
         consoleThread.start();
         try {
@@ -133,6 +162,9 @@ public class CustomConsole extends Application implements Runnable{
         }
         console.ta.setText(console.ta.getText() + str + "\r\n");
     }
+    public static void writeLine(boolean bool){
+        CustomConsole.writeLine("" + bool);
+    }
     
     public static void write(String str){
         consoleText = console.ta.getText();
@@ -151,6 +183,7 @@ public class CustomConsole extends Application implements Runnable{
         consoleText = console.ta.getText();
         editing = true;
         console.ta.setEditable(true);
+        typeHistoryIndex = typeHistory.size();
         Platform.runLater( new Runnable() {
             @Override
             public void run() {
@@ -167,7 +200,9 @@ public class CustomConsole extends Application implements Runnable{
             }
         }while(editing);
         console.ta.setEditable(false);
-        return console.ta.getText().substring(consoleText.length());
+        String str = console.ta.getText().substring(consoleText.length());
+        typeHistory.push(str);
+        return str;
     }
     
     public static String ReadKey(){
@@ -181,7 +216,6 @@ public class CustomConsole extends Application implements Runnable{
                 console.ta.positionCaret( console.ta.getText().length() );
             }
         });
-        //CustomConsole.writeLn(Thread.currentThread().getName());
         
         do{
             try {
@@ -226,3 +260,25 @@ public class CustomConsole extends Application implements Runnable{
 
     
 }
+
+class MainTracker implements Runnable{
+
+        private Thread mainThread;
+        
+        public MainTracker(Thread mThread){
+            mainThread = mThread;
+        }
+        
+        @Override
+        public void run() {
+            while(mainThread.getState() != Thread.State.TERMINATED){
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException ex) {
+                    System.out.println(ex.getMessage());
+                }
+            }
+            CustomConsole.Close();
+        }
+        
+    }
