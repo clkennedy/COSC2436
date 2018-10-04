@@ -135,24 +135,22 @@ public class LispEvaluator {
                     digit = false;
                 }
                 String expression = "";
+                Stack<String> getResult = new Stack <>();
                 while(!isOperand(lEval.peek())){
-                    expression += lEval.pop();
-                    if(!isOperand(lEval.peek())){
-                        expression += ",";
-                    }
+                    getResult.push(lEval.pop());
                 }
                 String op = lEval.pop();
                 if(op.equals("+")){
-                    lEval.push(AddExpression(expression) + "");
+                    lEval.push(AddExpression(getResult) + "");
                 }
                 if(op.equals("*")){
-                    lEval.push(MultiplyExpression(expression) + "");
+                    lEval.push(MultiplyExpression(getResult) + "");
                 }
                 if(op.equals("-")){
-                    lEval.push(SubtractExpression(expression) + "");
+                    lEval.push(SubtractExpression(getResult) + "");
                 }
                 if(op.equals("/")){
-                    lEval.push(DivideExpression(expression) + "");
+                    lEval.push(DivideExpression(getResult) + "");
                 }
             }
         }
@@ -161,34 +159,28 @@ public class LispEvaluator {
         return lEval.pop();
     }
     
-    private static double AddExpression(String str){
-        String[] nums = str.split(",");
+    private static double AddExpression(Stack<String> nums){
         double result = 0;
-        if(!str.equals("")){
-            for(int i = 0; i < nums.length; i++){
-                result += Double.parseDouble(nums[i]);
-            }
+        while(nums.size() > 0){
+            result += Double.parseDouble(nums.pop());
         }
+        
         return result;
     }
     
-    private static double MultiplyExpression(String str){
-        String[] nums = str.split(",");
+    private static double MultiplyExpression(Stack<String> nums){
         double result = 1;
-        if(!str.equals("")){
-            for(int i = 0; i < nums.length; i++){
-                result *= Double.parseDouble(nums[i]);
-            }
+        while(nums.size() > 0){
+                result *= Double.parseDouble(nums.pop());
         }
         return result;
     }
     
-    private static double SubtractExpression(String str){
-        String[] nums = str.split(",");
-        double result = Double.parseDouble(nums[nums.length - 1]);
-        if(!str.equals("") && nums.length > 1){
-            for(int i = nums.length - 2; i >= 0; i--){
-                result -= Double.parseDouble(nums[i]);
+    private static double SubtractExpression(Stack<String> nums){
+        double result = Double.parseDouble(nums.pop());
+        if(nums.size() > 0){
+            while(nums.size() > 0){
+                result -= Double.parseDouble(nums.pop());
             }
         }
         else{
@@ -197,12 +189,11 @@ public class LispEvaluator {
         return result;
     }
     
-    private static double DivideExpression(String str){
-        String[] nums = str.split(",");
-        double result = Double.parseDouble(nums[nums.length - 1]);
-        if(!str.equals("") && nums.length > 1){
-            for(int i = nums.length - 2; i >= 0; i--){
-                result /= Double.parseDouble(nums[i]);
+    private static double DivideExpression(Stack<String> nums){
+        double result = Double.parseDouble(nums.pop());
+        if(nums.size() > 0){
+            while(nums.size() > 0){
+                result /= Double.parseDouble(nums.pop());
             }
         }
         else{
