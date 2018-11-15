@@ -10,6 +10,11 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 import Database.*;
+import java.io.FileNotFoundException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -20,15 +25,23 @@ public class PatientDataBaseDriver {
     static boolean dirty = false;
     static Scanner keyboard;
     static PatientDataBase pdb;
+    static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    
     
     public static void main(String[] args) {
             
+        try {
+            JavaConsole.JavaConsole.Show();
+        } catch (Exception ex) {
+            Logger.getLogger(PatientDataBaseDriver.class.getName()).log(Level.SEVERE, null, ex);
+        }
         pdb = null;
         try {
             pdb = new PatientDataBase("patients.txt");
         }
-        catch(FileFormatException e)  {
+        catch(FileFormatException | FileNotFoundException e)  {
             writeln(e.toString());
+            ReadKey();
             return;
         }
         
@@ -45,7 +58,7 @@ public class PatientDataBaseDriver {
             writeln("s. Save database");
             writeln("q. Quit Program");
             write("Choice from above: ");
-            choice = keyboard.nextLine().charAt(0);
+            choice = ReadKey();
             writeln("****************************");
             
             switch(choice) {
@@ -82,7 +95,7 @@ public class PatientDataBaseDriver {
                 case 'q':   // Quit
                     if(dirty) {
                         writeln("Changes were made to the database.\nDo you want to save? (y/n): ");
-                        choice = keyboard.nextLine().charAt(0);
+                        choice = ReadKey();
                         if(choice == 'y' || choice == 'Y') {
                             pdb.writeDatabaseFile("patients.txt");
                             dirty = false;
@@ -96,11 +109,18 @@ public class PatientDataBaseDriver {
     }
     
     public static void write(String s) {
-        System.out.print(s);
+        JavaConsole.JavaConsole.write(s);
     }
     
     public static void writeln(String s) {
-        System.out.println(s);
+        JavaConsole.JavaConsole.writeLine(s);
+    }
+    
+    public static String ReadLine() {
+        return JavaConsole.JavaConsole.ReadLine();
+    }
+    public static char ReadKey() {
+        return JavaConsole.JavaConsole.ReadKey();
     }
     
     public static void printPatientNames() {
@@ -119,14 +139,15 @@ public class PatientDataBaseDriver {
         writeln("");
         writeln("*************************************");
         write("Enter patient first name: ");
-        String firstName = keyboard.nextLine();
+        String firstName = ReadLine();
         write("Enter patient last name: ");
-        String lastName = keyboard.nextLine();
+        String lastName = ReadLine();
         write("Enter date of birth (YYYY-MM-DD): ");
-        String DOB = keyboard.nextLine();
+        String DOB = ReadLine();
         writeln("*************************************");
         writeln("");
-        pdb.addPatientRecord(firstName, lastName, DOB);
+        
+        pdb.addPatientRecord(firstName, lastName, LocalDate.parse(DOB, dtf));
         dirty = true;
     }
     
@@ -134,14 +155,14 @@ public class PatientDataBaseDriver {
         writeln("");
         writeln("*************************************");
         write("Enter patient first name: ");
-        String firstName = keyboard.nextLine();
+        String firstName = ReadLine();
         write("Enter patient last name: ");
-        String lastName = keyboard.nextLine();
+        String lastName = ReadLine();
         write("Enter date of birth (YYYY-MM-DD): ");
-        String DOB = keyboard.nextLine();
+        String DOB = ReadLine();
         writeln("*************************************");
         writeln("");
-        pdb.removePatientRecord(firstName, lastName, DOB);
+        pdb.removePatientRecord(firstName, lastName, LocalDate.parse(DOB, dtf));
         dirty = true;
     }
     
@@ -151,7 +172,7 @@ public class PatientDataBaseDriver {
         writeln("*************************************");
         write("Enter patient ID: ");
         try {
-            id = Integer.parseInt(keyboard.nextLine());
+            id = Integer.parseInt(ReadLine());
             PatientRecord pr = pdb.getPatientRecord(id);
             if(pr == null) {
                 writeln("No patient record found for id " + id);                
@@ -167,7 +188,7 @@ public class PatientDataBaseDriver {
                 writeln("Visits");
                 List<String> visitDates = pdb.getVisitDates(id);
                 for(String date : visitDates) {
-                    List<Pair<String, String>> reasonTreatmentPairs = pdb.getReasonTreatmentPairs(id, date);
+                    List<Pair<String, String>> reasonTreatmentPairs = pdb.getReasonTreatmentPairs(id, LocalDate.parse(date, dtf));
                     writeln(date);
                     for(Pair<String, String> pair : reasonTreatmentPairs ) {
                         writeln("\t" + pair.getLeft() + " :: " + pair.getRight());
@@ -195,19 +216,19 @@ public class PatientDataBaseDriver {
         writeln("*************************************");
         write("Enter patient ID: ");
         try {
-            id = Integer.parseInt(keyboard.nextLine());
+            id = Integer.parseInt(ReadLine());
             PatientRecord pr = pdb.getPatientRecord(id);
             if(pr == null) {
                 writeln("No patient record found for id " + id);                
             }
             else {
                 write("What is the date of the visit (YYYY-MM-DD): ");
-                date = keyboard.nextLine();
+                date = ReadLine();
                 writeln("What was the reason for the visit?");
-                visitReason = keyboard.nextLine();
+                visitReason = ReadLine();
                 writeln("What treatment was provided for the visit?");
-                visitTreatment = keyboard.nextLine();
-                visit = new VisitRecord(visitReason, visitTreatment, date);
+                visitTreatment = ReadLine();
+                visit = new VisitRecord(visitReason, visitTreatment, LocalDate.parse(date, dtf));
                 pdb.addPatientVisit(id, visit);
                 dirty = true;
             }
