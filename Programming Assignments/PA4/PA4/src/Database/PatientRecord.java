@@ -42,9 +42,11 @@ public class PatientRecord {
     public VisitRecord getRecord(int index){
         return _visitRecords.get(index).Copy();
     }
-    public List<VisitRecord> getAllRecord(int index){
-       List<VisitRecord> copyOf = new ArrayList<>(_visitRecords.size());
-        Collections.copy(copyOf, _visitRecords);
+    public List<VisitRecord> getAllRecords(){
+        List<VisitRecord> copyOf = new ArrayList<>(_visitRecords.size());
+        for(VisitRecord vr : _visitRecords){
+            copyOf.add(new VisitRecord(vr.ReasonForVisit(), vr.Treatment(), vr.DateVisisted()));
+        }
         return copyOf;
     }
     

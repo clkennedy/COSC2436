@@ -33,7 +33,8 @@ public class PatientDataBaseDriver {
         try {
             JavaConsole.JavaConsole.Show();
         } catch (Exception ex) {
-            Logger.getLogger(PatientDataBaseDriver.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println(ex.getMessage());
+            return;
         }
         pdb = null;
         try {
