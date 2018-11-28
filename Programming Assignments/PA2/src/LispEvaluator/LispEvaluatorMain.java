@@ -24,7 +24,7 @@ public class LispEvaluatorMain {
         try {
             JavaConsole.Show();
         } catch (Exception ex) {
-            Logger.getLogger(LispEvaluatorMain.class.getName()).log(Level.SEVERE, null, ex);
+            JavaConsole.Log(ex.getMessage());
         }
         String input="";
         do{

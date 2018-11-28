@@ -6,6 +6,10 @@
 package customconsole;
 
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.time.LocalDateTime;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,6 +18,7 @@ import static javafx.application.Application.launch;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -106,7 +111,11 @@ public class JavaConsole extends Application implements Runnable{
         });
         
         StackPane root = new StackPane();
-        root.getChildren().add(ta);
+        ScrollPane sPane = new ScrollPane();
+        sPane.setFitToWidth(true);
+        sPane.setFitToHeight(true);
+        sPane.setContent(ta);
+        root.getChildren().add(sPane);
         
         
         Scene scene = new Scene(root, 300, 250);
@@ -150,7 +159,7 @@ public class JavaConsole extends Application implements Runnable{
                 Thread.sleep(1000);
             }while(console == null);
         } catch (InterruptedException ex) {
-            Logger.getLogger(JavaConsole.class.getName()).log(Level.SEVERE, null, ex);
+            Log(ex.getMessage());
         }
     }
     
@@ -170,6 +179,12 @@ public class JavaConsole extends Application implements Runnable{
     }
     public static void writeLine(boolean bool){
         JavaConsole.writeLine("" + bool);
+    }
+    public static void writeLine(Double d){
+        JavaConsole.writeLine("" + d);
+    }
+    public static void writeLine(){
+        JavaConsole.writeLine("");
     }
     
     public static void write(String str){
@@ -202,7 +217,7 @@ public class JavaConsole extends Application implements Runnable{
             try {
                 Thread.sleep(50);
             } catch (InterruptedException ex) {
-                Logger.getLogger(JavaConsole.class.getName()).log(Level.SEVERE, null, ex);
+                Log(ex.getMessage());
             }
         }while(editing);
         console.ta.setEditable(false);
@@ -228,7 +243,7 @@ public class JavaConsole extends Application implements Runnable{
             try {
                 Thread.sleep(50);
             } catch (InterruptedException ex) {
-                Logger.getLogger(JavaConsole.class.getName()).log(Level.SEVERE, null, ex);
+               Log(ex.getMessage());
             }
         }while(editing);
         console.ta.setEditable(false);
@@ -246,11 +261,10 @@ public class JavaConsole extends Application implements Runnable{
         });
             Thread.sleep(1000);
         } catch (Exception ex) {
-            System.out.println(ex.getMessage());
+            Log(ex.getMessage());
         }
         
     }
-    
     public static void setTitle(String title){
         console.priStage.setTitle(title);
     }
@@ -265,6 +279,20 @@ public class JavaConsole extends Application implements Runnable{
         launch();
     }
 
+    public static void Log(String str){
+        File f = new File(System.getProperty("user.dir") + "\\JavaConsoleLog.log");
+        PrintWriter pw = null;
+        try {
+            pw = new PrintWriter(f);
+            pw.println(LocalDateTime.now() + ": " + str);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(JavaConsole.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally{
+            if(pw != null)
+                pw.close();
+        }
+    }
     
 }
 
@@ -282,7 +310,7 @@ class MainTracker implements Runnable{
                 try {
                     Thread.sleep(300);
                 } catch (InterruptedException ex) {
-                    System.out.println(ex.getMessage());
+                    JavaConsole.Log(ex.getMessage());
                 }
             }
             JavaConsole.Close();
