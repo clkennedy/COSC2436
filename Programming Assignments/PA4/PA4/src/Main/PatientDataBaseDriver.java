@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import JavaConsole.JavaConsole;
 
 /**
  *
@@ -31,7 +32,7 @@ public class PatientDataBaseDriver {
     public static void main(String[] args) {
             
         try {
-            JavaConsole.JavaConsole.Show();
+            JavaConsole.Show();
         } catch (Exception ex) {
             System.err.println(ex.getMessage());
             return;
@@ -49,8 +50,9 @@ public class PatientDataBaseDriver {
         keyboard = new Scanner(System.in);
         
         char choice = 'q';
-                
+        JavaConsole.Clear();
         do {
+            JavaConsole.Clear();
             writeln("1. List all patient names");
             writeln("2. Add a new patient");
             writeln("3. Remove patient");
@@ -61,7 +63,7 @@ public class PatientDataBaseDriver {
             write("Choice from above: ");
             choice = ReadKey();
             writeln("****************************");
-            
+            JavaConsole.Clear();
             switch(choice) {
                 case '1':   // List patient names
                     printPatientNames();
@@ -79,11 +81,13 @@ public class PatientDataBaseDriver {
                     break;
                     
                 case '4':   // Get a patient record
+                    printPatientNames();
                     displayPatientInformation();
                     writeln("");
                     break;
                     
                 case '5':   // Add a new visit
+                    printPatientNames();
                     addPatientVisit();
                     writeln("");
                     break;
@@ -106,22 +110,24 @@ public class PatientDataBaseDriver {
                     break;                                        
             }
             writeln("****************************");
+            writeln("Press any key to continue..");
+            ReadKey();
         } while(choice != 'q');
     }
     
     public static void write(String s) {
-        JavaConsole.JavaConsole.write(s);
+        JavaConsole.write(s);
     }
     
     public static void writeln(String s) {
-        JavaConsole.JavaConsole.writeLine(s);
+        JavaConsole.writeLine(s);
     }
     
     public static String ReadLine() {
-        return JavaConsole.JavaConsole.ReadLine();
+        return JavaConsole.ReadLine();
     }
     public static char ReadKey() {
-        return JavaConsole.JavaConsole.ReadKey();
+        return JavaConsole.ReadKey();
     }
     
     public static void printPatientNames() {
@@ -179,6 +185,7 @@ public class PatientDataBaseDriver {
                 writeln("No patient record found for id " + id);                
             }
             else {
+                JavaConsole.Clear();
                 writeln("");
                 writeln("Patient Information");
                 writeln("ID: " + id);

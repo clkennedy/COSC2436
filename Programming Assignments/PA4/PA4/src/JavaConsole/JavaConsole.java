@@ -8,8 +8,12 @@ package JavaConsole;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,6 +49,8 @@ public class JavaConsole extends Application implements Runnable{
     
     private static volatile Stack<String> typeHistory = new Stack<>();
     private static volatile int typeHistoryIndex = 0;
+    
+    private static volatile boolean isRunning = false;
     //private CustomConsole thread;
     
     public JavaConsole(){
@@ -148,9 +154,12 @@ public class JavaConsole extends Application implements Runnable{
         priStage = primaryStage;
         console = this;
     }
-    public static void Show() throws Exception{
+    public static boolean isRunning(){
+        return isRunning;
+    }
+    public static void Show() throws ConsoleRunningException{
         if(console != null || consoleThread != null){
-            throw new Exception("Console Already Running");
+            throw new ConsoleRunningException("Console Already Running");
         }
         consoleThread = new Thread(new JavaConsole());
         mainThread = Thread.currentThread();
@@ -169,9 +178,18 @@ public class JavaConsole extends Application implements Runnable{
         } catch (InterruptedException ex) {
             Log(ex.getMessage());
         }
+        
+        isRunning = true;
     }
     
     public static void writeLine(String str){
+        if(!isRunning){
+            try {
+                JavaConsole.Show();
+            } catch (ConsoleRunningException ex) {
+                Log(ex.getMessage());
+            }
+        }
         
         if(console.ta.isEditable()){
             Platform.runLater( new Runnable() {
@@ -220,13 +238,14 @@ public class JavaConsole extends Application implements Runnable{
     }
     
     public static String ReadLine(){
-        consoleText = console.ta.getText();
+        
         editing = true;
         console.ta.setEditable(true);
         typeHistoryIndex = typeHistory.size();
         Platform.runLater( new Runnable() {
             @Override
             public void run() {
+                consoleText = console.ta.getText();
                 console.ta.positionCaret( console.ta.getText().length() );
             }
         });
@@ -284,6 +303,7 @@ public class JavaConsole extends Application implements Runnable{
             @Override
             public void run() {
                 console.priStage.close();
+                isRunning = false;
             }
         });
             Thread.sleep(1000);
@@ -297,10 +317,15 @@ public class JavaConsole extends Application implements Runnable{
     }
     
     public static void Clear(){
-        consoleText = "";
-        console.ta.setText("");
+        Platform.runLater( new Runnable() {
+            @Override
+            public void run() {
+                consoleText = "";
+                console.ta.setText("");;
+            }
+        });
     }
-
+              
     @Override
     public void run() {
         launch();
@@ -308,19 +333,35 @@ public class JavaConsole extends Application implements Runnable{
 
     public static void Log(String str){
         File f = new File(System.getProperty("user.dir") + "\\JavaConsoleLog.log");
-        PrintWriter pw = null;
+        //final PrintWriter pw = null;
+        Scanner fileReader = null;
         try {
-            pw = new PrintWriter(f);
+            fileReader = new Scanner(new FileReader(f));
+            List<String> lines = new ArrayList();
+            while(fileReader.hasNextLine()){
+                lines.add(fileReader.nextLine());
+            }
+            fileReader.close();
+            
+            final PrintWriter pw = new PrintWriter(f);
+            lines.forEach(line -> {pw.println(line);});
             pw.println(LocalDateTime.now() + ": " + str);
+            
+            pw.close();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(JavaConsole.class.getName()).log(Level.SEVERE, null, ex);
         }
         finally{
-            if(pw != null)
-                pw.close();
+            
         }
     }
     
+}
+
+class ConsoleRunningException extends Exception{
+    public ConsoleRunningException(String str){
+        super(str);
+    }
 }
 
 class MainTracker implements Runnable{

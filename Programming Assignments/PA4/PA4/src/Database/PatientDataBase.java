@@ -18,6 +18,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Scanner;
 import java.util.Set;
@@ -151,7 +152,6 @@ public class PatientDataBase {
             PatientRecord pr = _patients.get(key);
             rtn.put(pr.hashCode(), pr.FirstName() + " " + pr.LastName());
         }
-        
         return rtn;
     }
     
@@ -188,11 +188,78 @@ public class PatientDataBase {
         
         List<VisitRecord> vrs = _patients.get(id).getAllRecords();
         
+        vrs.forEach((vr) -> {
+            rtn.add(vr.DateVisisted().toString());
+        });
+        
+        return rtn;
+    }
+    
+    public List<String> getNamesIds(){
+        List<String> rtn = new ArrayList();
+        List<PatientRecord> prs = new ArrayList();
+        Set<Integer> keys = _patients.keySet();
+        
+        for(Integer key : keys){
+            PatientRecord pr = _patients.get(key);
+            prs.add(pr);
+        }
+        
+        Collections.sort(prs);
+        
+        prs.forEach((pr) -> { rtn.add(pr.toString()); });
+        
+        return rtn;
+    }
+    
+     public List<String> getAllReasons(int id, LocalDate date){
+        List<String> rtn = new ArrayList();
+        
+        List<VisitRecord> vrs = _patients.get(id).getAllRecords();
+        
+        for(VisitRecord vr : vrs){
+            if(date.equals(vr.DateVisisted()))
+            rtn.add(vr.ReasonForVisit());
+        }
+        
+        return rtn;
+    }
+     
+     public List<String> getAllReasons(String firstName, String lastName, LocalDate dob, LocalDate dateVisited){
+        return getAllReasons(new PatientRecord(firstName, lastName, dob).hashCode(), dateVisited);
+    }
+     
+     public List<String> getAllTreatments(int id, LocalDate date){
+        List<String> rtn = new ArrayList();
+        
+        List<VisitRecord> vrs = _patients.get(id).getAllRecords();
+        
+        for(VisitRecord vr : vrs){
+            if(date.equals(vr.DateVisisted()))
+            rtn.add(vr.Treatment());
+        }
+        
+        return rtn;
+    }
+     
+    public List<String> getAllTreatments(String firstName, String lastName, LocalDate dob, LocalDate dateVisited){
+        return getAllTreatments(new PatientRecord(firstName, lastName, dob).hashCode(), dateVisited);
+    }
+    
+     public List<String> getAllVisitationDates(int id){
+        List<String> rtn = new ArrayList();
+        
+        List<VisitRecord> vrs = _patients.get(id).getAllRecords();
+        
         for(VisitRecord vr : vrs){
             rtn.add(vr.DateVisisted().toString());
         }
         
         return rtn;
+    }
+     
+    public List<String> getAllVisitationDates(String firstName, String lastName, LocalDate dob){
+        return getAllVisitationDates(new PatientRecord(firstName, lastName, dob).hashCode());
     }
     
     public List<Pair<String, String>> getReasonTreatmentPairs(int id,LocalDate date){
@@ -208,10 +275,19 @@ public class PatientDataBase {
         return rtn;
     }
     
+    public List<Pair<String, String>> getReasonTreatmentPairs(String firstName, String lastName, LocalDate dob,LocalDate date){
+        return getReasonTreatmentPairs(new PatientRecord(firstName, lastName, dob).hashCode(), date);
+    }
+    
+    
     public boolean addPatientVisit(int id,VisitRecord visit){
         
         _patients.get(id).addVisit(visit);
         
         return true;
+    }
+    
+    public boolean addPatientVisit(String firstName, String lastName, LocalDate dob ,VisitRecord visit){
+        return addPatientVisit(new PatientRecord(firstName, lastName, dob).hashCode(), visit);
     }
 }

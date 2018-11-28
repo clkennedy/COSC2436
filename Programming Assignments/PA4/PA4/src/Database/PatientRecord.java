@@ -17,7 +17,7 @@ import java.util.Objects;
  *
  * @author cameron.kennedy
  */
-public class PatientRecord {
+public class PatientRecord implements Comparable {
     private String _firstName;
     private String _lastName;
     private LocalDate _dob;
@@ -57,7 +57,7 @@ public class PatientRecord {
     
     @Override
     public String toString(){
-        return "";
+        return LastName() + ", " + FirstName() + ": " + hashCode();
     }
     @Override
     public boolean equals(Object o){
@@ -74,5 +74,10 @@ public class PatientRecord {
         hash = 79 * hash + Objects.hashCode(this._lastName);
         hash = 79 * hash + Objects.hashCode(this._dob);
         return hash & 0x7fffffff;
+    }
+
+    @Override
+    public int compareTo(Object t) {
+        return this.LastName().compareTo(((PatientRecord)t).LastName());
     }
 }
